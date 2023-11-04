@@ -27,6 +27,6 @@ def main(folder_path, scaled_folder_path):
             print("Removing ", filename)
 
 if __name__ == "__main__":
-    folder = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/Objects'
-    scaled_folder = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/Scaled_Objects'
+    folder = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/missing_objects'
+    scaled_folder = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/missing_objects_scaled'
     main(folder, scaled_folder)
