@@ -1,5 +1,6 @@
 import bpy
 import os
+import trimesh
 
 source_directory = "../files/Scaled_Objects/"
 destination_directory = "../files/sCloths/"
@@ -72,12 +73,15 @@ for filename in os.listdir(source_directory):
             export_path = os.path.join(destination_directory, filename)
             bpy.ops.object.select_all(action='DESELECT')
             cloth.select_set(True)
-            bpy.ops.transform.resize(value=(0.25, 0.25, 0.25))
+            #bpy.ops.transform.resize(value=(0.25, 0.25, 0.25))
 
             bpy.ops.export_scene.obj(filepath=export_path, use_selection=True)
             mtl_file_path = os.path.join(destination_directory, os.path.splitext(filename)[0] + ".mtl")
             if os.path.exists(mtl_file_path):
                 os.remove(mtl_file_path)
+            mesh = trimesh.load_mesh(export_path)
+            mesh.apply_transform(trimesh.transformations.scale_matrix(0.25))
+            mesh.export(export_path)
             print("Cloth #", ++i)
 
         else:
