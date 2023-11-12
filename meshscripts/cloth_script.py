@@ -1,8 +1,8 @@
 import bpy
 import os
 
-source_directory = "/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/Scaled_Objects/"
-destination_directory = "/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/Cloths/"
+source_directory = "../files/Scaled_Objects/"
+destination_directory = "../files/sCloths/"
 
 
 # Function to clear mesh objects
@@ -41,12 +41,14 @@ for filename in os.listdir(source_directory):
             # 2. Set the object as a collision object
             bpy.ops.object.modifier_add(type='COLLISION')
             obj.collision.thickness_outer = 0.001
+            bpy.ops.object.shade_smooth()
+            bpy.ops.transform.resize(value=(4, 4, 4))
 
             # 3. Create the cloth object
             bpy.ops.mesh.primitive_plane_add(enter_editmode=False, align='WORLD', location=(0, 0, 0))
             cloth = bpy.context.object
-            bpy.ops.transform.translate(value=(0, 0, 1))
-            bpy.ops.transform.resize(value=(1, 1, 1))
+            bpy.ops.transform.translate(value=(0, 0, 1.01))
+            bpy.ops.transform.resize(value=(4, 4, 4))
             bpy.ops.object.modifier_add(type='CLOTH')
             cloth_mod = cloth.modifiers["Cloth"]
             cloth_mod.settings.quality = 10
@@ -56,7 +58,7 @@ for filename in os.listdir(source_directory):
             cloth_mod.settings.mass = 1
             bpy.ops.object.shade_smooth()
             bpy.ops.object.editmode_toggle()
-            bpy.ops.mesh.subdivide(number_cuts=40, smoothness=0)
+            bpy.ops.mesh.subdivide(number_cuts=50, smoothness=0)
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.modifier_add(type='SUBSURF')
 
@@ -70,6 +72,8 @@ for filename in os.listdir(source_directory):
             export_path = os.path.join(destination_directory, filename)
             bpy.ops.object.select_all(action='DESELECT')
             cloth.select_set(True)
+            bpy.ops.transform.resize(value=(0.25, 0.25, 0.25))
+
             bpy.ops.export_scene.obj(filepath=export_path, use_selection=True)
             mtl_file_path = os.path.join(destination_directory, os.path.splitext(filename)[0] + ".mtl")
             if os.path.exists(mtl_file_path):
