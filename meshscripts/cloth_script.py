@@ -3,7 +3,7 @@ import os
 import trimesh
 
 source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/Scaled_Objects/"
-destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/moreSubdiv/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/evenMoreSubdiv/"
 
 
 # Function to clear mesh objects
@@ -61,19 +61,20 @@ for filename in os.listdir(source_directory):
             bpy.ops.transform.resize(value=(4, 4, 4))
             bpy.ops.object.modifier_add(type='CLOTH')
             cloth_mod = cloth.modifiers["Cloth"]
-            cloth_mod.settings.quality = 10
+            cloth_mod.settings.quality = 12
             cloth_mod.collision_settings.use_self_collision = True
-            cloth_mod.collision_settings.collision_quality = 6
+            cloth_mod.collision_settings.collision_quality = 10
             cloth_mod.settings.bending_stiffness = 6
             cloth_mod.settings.mass = 1
             bpy.ops.object.shade_smooth()
             bpy.ops.object.editmode_toggle()
-            bpy.ops.mesh.subdivide(number_cuts=90, smoothness=0)
+            bpy.ops.mesh.subdivide(number_cuts=160, smoothness=0)
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.modifier_add(type='SUBSURF')
 
             # 4. Simulate the cloth physics
-            for frame in range(1, 121):  # Simulating for 100 frames as an example
+            for frame in range(1, 101):  # Simulating for 100 frames as an example
+                print("Frame: "+ str(frame))
                 bpy.context.scene.frame_set(frame)
                 bpy.ops.wm.redraw_timer(type='DRAW', iterations=1)
 
