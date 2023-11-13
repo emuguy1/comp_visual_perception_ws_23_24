@@ -2,8 +2,8 @@ import bpy
 import os
 import trimesh
 
-source_directory = "../files/Scaled_Objects/"
-destination_directory = "../files/sCloths/"
+source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/Scaled_Objects/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/sCloths/"
 
 
 # Function to clear mesh objects
@@ -41,14 +41,23 @@ for filename in os.listdir(source_directory):
 
             # 2. Set the object as a collision object
             bpy.ops.object.modifier_add(type='COLLISION')
-            obj.collision.thickness_outer = 0.001
+            obj.collision.thickness_outer = 0.01
+            obj.collision.use_culling = False
             bpy.ops.object.shade_smooth()
             bpy.ops.transform.resize(value=(4, 4, 4))
+
+            # 2.1 Create base plate
+            bpy.ops.mesh.primitive_plane_add(size=10, enter_editmode=False, align='WORLD', location=(0, 0, 0))
+            bpy.ops.object.modifier_add(type='COLLISION')
+            obj.collision.thickness_outer = 0.01
+            base_plane = bpy.context.object
+            base_plane.name = "Floor"
 
             # 3. Create the cloth object
             bpy.ops.mesh.primitive_plane_add(enter_editmode=False, align='WORLD', location=(0, 0, 0))
             cloth = bpy.context.object
-            bpy.ops.transform.translate(value=(0, 0, 1.01))
+            cloth.name = "Cloth"
+            bpy.ops.transform.translate(value=(0, 0, 4))
             bpy.ops.transform.resize(value=(4, 4, 4))
             bpy.ops.object.modifier_add(type='CLOTH')
             cloth_mod = cloth.modifiers["Cloth"]
@@ -64,12 +73,13 @@ for filename in os.listdir(source_directory):
             bpy.ops.object.modifier_add(type='SUBSURF')
 
             # 4. Simulate the cloth physics
-            for frame in range(1, 101):  # Simulating for 100 frames as an example
+            for frame in range(1, 121):  # Simulating for 100 frames as an example
                 bpy.context.scene.frame_set(frame)
                 bpy.ops.wm.redraw_timer(type='DRAW', iterations=1)
 
             # 5. Export the cloth object as an .obj file to the specified directory
-            cloth = bpy.data.objects["Plane"]  # This assumes the name of the cloth object is 'Plane'
+            bpy.data.objects.remove(bpy.data.objects["Floor"])
+            cloth = bpy.data.objects["Cloth"]  # This assumes the name of the cloth object is 'Cloth'
             export_path = os.path.join(destination_directory, filename)
             bpy.ops.object.select_all(action='DESELECT')
             cloth.select_set(True)
