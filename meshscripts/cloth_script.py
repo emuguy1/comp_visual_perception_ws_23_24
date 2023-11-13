@@ -3,7 +3,7 @@ import os
 import trimesh
 
 source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/Scaled_Objects/"
-destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/sCloths/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/moreSubdiv/"
 
 
 # Function to clear mesh objects
@@ -68,7 +68,7 @@ for filename in os.listdir(source_directory):
             cloth_mod.settings.mass = 1
             bpy.ops.object.shade_smooth()
             bpy.ops.object.editmode_toggle()
-            bpy.ops.mesh.subdivide(number_cuts=50, smoothness=0)
+            bpy.ops.mesh.subdivide(number_cuts=90, smoothness=0)
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.modifier_add(type='SUBSURF')
 
