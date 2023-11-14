@@ -2,8 +2,8 @@ import bpy
 import os
 import trimesh
 
-source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/Scaled_Objects/"
-destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/evenMoreSubdiv/"
+source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/centered_scaled_Objects/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/prefinal_cloths/"
 
 
 # Function to clear mesh objects
@@ -61,14 +61,14 @@ for filename in os.listdir(source_directory):
             bpy.ops.transform.resize(value=(4, 4, 4))
             bpy.ops.object.modifier_add(type='CLOTH')
             cloth_mod = cloth.modifiers["Cloth"]
-            cloth_mod.settings.quality = 12
+            cloth_mod.settings.quality = 11
             cloth_mod.collision_settings.use_self_collision = True
-            cloth_mod.collision_settings.collision_quality = 10
-            cloth_mod.settings.bending_stiffness = 6
+            cloth_mod.collision_settings.collision_quality = 9
+            cloth_mod.settings.bending_stiffness = 5
             cloth_mod.settings.mass = 1
             bpy.ops.object.shade_smooth()
             bpy.ops.object.editmode_toggle()
-            bpy.ops.mesh.subdivide(number_cuts=160, smoothness=0)
+            bpy.ops.mesh.subdivide(number_cuts=150, smoothness=0)
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.modifier_add(type='SUBSURF')
 
