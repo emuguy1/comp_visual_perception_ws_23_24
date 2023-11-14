@@ -54,6 +54,7 @@ for filename in os.listdir(source_directory):
 
             # Apply translations
             obj.location += center_to_origin
+            bpy.ops.object.origin_set(type='GEOMETRY_ORIGIN', center='MEDIAN')
             obj.location += lowest_to_zero
 
 
