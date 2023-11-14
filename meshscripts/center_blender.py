@@ -44,6 +44,8 @@ for filename in os.listdir(source_directory):
             # Get reference to the object
             obj = bpy.data.objects["Cloth"]
 
+            bpy.ops.object.origin_set(type='GEOMETRY_ORIGIN', center='MEDIAN')
+
             # Get the object's bounding box
             bbox = [obj.matrix_world @ mathutils.Vector(corner) for corner in obj.bound_box]
             min_z = min(bbox, key=lambda v: v[2])[2]
@@ -54,7 +56,6 @@ for filename in os.listdir(source_directory):
 
             # Apply translations
             obj.location += center_to_origin
-            bpy.ops.object.origin_set(type='GEOMETRY_ORIGIN', center='MEDIAN')
             obj.location += lowest_to_zero
 
 
