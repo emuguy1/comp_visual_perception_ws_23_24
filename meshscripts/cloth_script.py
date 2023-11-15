@@ -1,8 +1,9 @@
 import bpy
 import os
+import trimesh
 
-source_directory = "/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/Scaled_Objects/"
-destination_directory = "/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/files/Cloths/"
+source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/centered_scaled_Objects/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/prefinal_cloths/"
 
 
 # Function to clear mesh objects
@@ -40,40 +41,58 @@ for filename in os.listdir(source_directory):
 
             # 2. Set the object as a collision object
             bpy.ops.object.modifier_add(type='COLLISION')
-            obj.collision.thickness_outer = 0.001
+            obj.collision.thickness_outer = 0.01
+            obj.collision.use_culling = False
+            bpy.ops.object.shade_smooth()
+            bpy.ops.transform.resize(value=(4, 4, 4))
+
+            # 2.1 Create base plate
+            bpy.ops.mesh.primitive_plane_add(size=10, enter_editmode=False, align='WORLD', location=(0, 0, 0))
+            bpy.ops.object.modifier_add(type='COLLISION')
+            obj.collision.thickness_outer = 0.01
+            base_plane = bpy.context.object
+            base_plane.name = "Floor"
 
             # 3. Create the cloth object
             bpy.ops.mesh.primitive_plane_add(enter_editmode=False, align='WORLD', location=(0, 0, 0))
             cloth = bpy.context.object
-            bpy.ops.transform.translate(value=(0, 0, 1))
-            bpy.ops.transform.resize(value=(1, 1, 1))
+            cloth.name = "Cloth"
+            bpy.ops.transform.translate(value=(0, 0, 4))
+            bpy.ops.transform.resize(value=(4, 4, 4))
             bpy.ops.object.modifier_add(type='CLOTH')
             cloth_mod = cloth.modifiers["Cloth"]
-            cloth_mod.settings.quality = 10
+            cloth_mod.settings.quality = 11
             cloth_mod.collision_settings.use_self_collision = True
-            cloth_mod.collision_settings.collision_quality = 6
-            cloth_mod.settings.bending_stiffness = 6
+            cloth_mod.collision_settings.collision_quality = 9
+            cloth_mod.settings.bending_stiffness = 5
             cloth_mod.settings.mass = 1
             bpy.ops.object.shade_smooth()
             bpy.ops.object.editmode_toggle()
-            bpy.ops.mesh.subdivide(number_cuts=40, smoothness=0)
+            bpy.ops.mesh.subdivide(number_cuts=150, smoothness=0)
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.modifier_add(type='SUBSURF')
 
             # 4. Simulate the cloth physics
             for frame in range(1, 101):  # Simulating for 100 frames as an example
+                print("Frame: "+ str(frame))
                 bpy.context.scene.frame_set(frame)
                 bpy.ops.wm.redraw_timer(type='DRAW', iterations=1)
 
             # 5. Export the cloth object as an .obj file to the specified directory
-            cloth = bpy.data.objects["Plane"]  # This assumes the name of the cloth object is 'Plane'
+            bpy.data.objects.remove(bpy.data.objects["Floor"])
+            cloth = bpy.data.objects["Cloth"]  # This assumes the name of the cloth object is 'Cloth'
             export_path = os.path.join(destination_directory, filename)
             bpy.ops.object.select_all(action='DESELECT')
             cloth.select_set(True)
+            #bpy.ops.transform.resize(value=(0.25, 0.25, 0.25))
+
             bpy.ops.export_scene.obj(filepath=export_path, use_selection=True)
             mtl_file_path = os.path.join(destination_directory, os.path.splitext(filename)[0] + ".mtl")
             if os.path.exists(mtl_file_path):
                 os.remove(mtl_file_path)
+            mesh = trimesh.load_mesh(export_path)
+            mesh.apply_transform(trimesh.transformations.scale_matrix(0.25))
+            mesh.export(export_path)
             print("Cloth #", ++i)
 
         else:
