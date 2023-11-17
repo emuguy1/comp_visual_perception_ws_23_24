@@ -16,6 +16,7 @@ def clear_mesh_objects():
 # Iterate over all files in the source directory
 for filename in os.listdir(source_directory):
     i = 0
+    scaling_factor = 4
     if filename.endswith(".obj"):
         clear_mesh_objects()  # Clear mesh objects for each iteration
 
@@ -44,10 +45,10 @@ for filename in os.listdir(source_directory):
             obj.collision.thickness_outer = 0.01
             obj.collision.use_culling = False
             bpy.ops.object.shade_smooth()
-            bpy.ops.transform.resize(value=(4, 4, 4))
+            bpy.ops.transform.resize(value=(scaling_factor, scaling_factor, scaling_factor))
 
             # 2.1 Create base plate
-            bpy.ops.mesh.primitive_plane_add(size=10, enter_editmode=False, align='WORLD', location=(0, 0, 0))
+            bpy.ops.mesh.primitive_plane_add(size=20, enter_editmode=False, align='WORLD', location=(0, 0, 0))
             bpy.ops.object.modifier_add(type='COLLISION')
             obj.collision.thickness_outer = 0.01
             base_plane = bpy.context.object
@@ -57,8 +58,8 @@ for filename in os.listdir(source_directory):
             bpy.ops.mesh.primitive_plane_add(enter_editmode=False, align='WORLD', location=(0, 0, 0))
             cloth = bpy.context.object
             cloth.name = "Cloth"
-            bpy.ops.transform.translate(value=(0, 0, 4))
-            bpy.ops.transform.resize(value=(4, 4, 4))
+            bpy.ops.transform.translate(value=(0, 0, scaling_factor))
+            bpy.ops.transform.resize(value=(scaling_factor, scaling_factor, scaling_factor))
             bpy.ops.object.modifier_add(type='CLOTH')
             cloth_mod = cloth.modifiers["Cloth"]
             cloth_mod.settings.quality = 11
@@ -68,7 +69,7 @@ for filename in os.listdir(source_directory):
             cloth_mod.settings.mass = 1
             bpy.ops.object.shade_smooth()
             bpy.ops.object.editmode_toggle()
-            bpy.ops.mesh.subdivide(number_cuts=150, smoothness=0)
+            bpy.ops.mesh.subdivide(number_cuts=170, smoothness=0)
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.modifier_add(type='SUBSURF')
 
@@ -91,7 +92,7 @@ for filename in os.listdir(source_directory):
             if os.path.exists(mtl_file_path):
                 os.remove(mtl_file_path)
             mesh = trimesh.load_mesh(export_path)
-            mesh.apply_transform(trimesh.transformations.scale_matrix(0.25))
+            mesh.apply_transform(trimesh.transformations.scale_matrix((1/scaling_factor)))
             mesh.export(export_path)
             print("Cloth #", ++i)
 
