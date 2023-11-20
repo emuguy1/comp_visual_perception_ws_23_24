@@ -2,8 +2,8 @@ import bpy
 import mathutils
 import os
 
-source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/missing_objects_scaled/"
-destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/centered_scaled_Objects/"
+source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/mist/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/mistc/"
 
 
 # Function to clear mesh objects

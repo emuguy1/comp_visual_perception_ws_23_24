@@ -2,8 +2,8 @@ import bpy
 import os
 import trimesh
 
-source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/centered_scaled_Objects/"
-destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/prefinal_cloths/"
+source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/mistc/"
+destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/misclo/"
 
 
 # Function to clear mesh objects

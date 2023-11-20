@@ -27,6 +27,6 @@ def main(folder_path, scaled_folder_path):
             print("Removing ", filename)
 
 if __name__ == "__main__":
-    folder = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/missing_objects"
-    scaled_folder = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/missing_objects_scaled"
+    folder = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/mis"
+    scaled_folder = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/files/mist"
     main(folder, scaled_folder)
