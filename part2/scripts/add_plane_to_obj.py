@@ -34,11 +34,19 @@ for filename in os.listdir(source_directory):
 
         # Check if there are selected objects after import
         if bpy.context.selected_objects:
+
             obj = bpy.context.selected_objects[0]
+            # Add Subdivision Surface modifier
+            # subsurf_modifier = obj.modifiers.new(name="Subdivision", type='SUBSURF')
+            # subsurf_modifier.levels = 1  # Set the subdivision levels as needed
+            # subsurf_modifier.render_levels = 0  # Set render subdivision levels if different from viewport
             bpy.context.view_layer.objects.active = obj
 
             # 2. Create base plate
-            bpy.ops.mesh.primitive_plane_add(size=5, enter_editmode=False, align='WORLD', location=(0, 0, 0))
+            bpy.ops.mesh.primitive_plane_add(size=3, enter_editmode=False, align='WORLD', location=(0, 0, 0))
+            bpy.ops.object.editmode_toggle()
+            bpy.ops.mesh.subdivide(number_cuts=100, smoothness=0)
+            bpy.ops.object.editmode_toggle()
             base_plane = bpy.context.object
             base_plane.name = "Floor"
 
