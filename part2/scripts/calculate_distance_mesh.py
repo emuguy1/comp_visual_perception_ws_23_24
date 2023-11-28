@@ -4,9 +4,14 @@ import trimesh
 from scipy.spatial import KDTree
 
 # Define your directories
-cloth_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/cloth_mesh'
-object_dir = '//home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/object_mesh'
-output_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/distance_mesh'
+#Felix
+#cloth_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/cloth_mesh'
+#object_dir = '//home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/object_mesh'
+#output_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/distance_mesh'
+#Emanuel
+cloth_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/cloth_mesh/'
+object_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/object_mesh/'
+output_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/'
 
 # Get list of filenames in the directories
 cloth_files = sorted([f for f in os.listdir(cloth_dir) if f.endswith('.obj')])
@@ -18,7 +23,7 @@ threshold = 0.1
 for cloth_file, object_file in zip(cloth_files, object_files):
     # Load the OBJ files
     cloth = trimesh.load(os.path.join(cloth_dir, cloth_file))
-    object = trimesh.load(os.path.join(object_dir, object_file))
+    object = trimesh.load(os.path.join(object_dir, object_file), force='mesh')
 
     # Extract vertices
     cloth_vertices = cloth.vertices

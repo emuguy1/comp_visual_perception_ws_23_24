@@ -1,7 +1,7 @@
 import bpy
 import os
 
-source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/object_mesh/"
+source_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part1/files/submission/objects/"
 destination_directory = "D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/object_mesh/"
 
 
