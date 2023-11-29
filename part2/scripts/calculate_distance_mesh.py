@@ -5,13 +5,13 @@ from scipy.spatial import KDTree
 
 # Define your directories
 #Felix
-#cloth_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/cloth_mesh'
-#object_dir = '//home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/object_mesh'
-#output_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/distance_mesh'
+cloth_dir = '/home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/cloth_mesh/'
+object_dir = '//home/felix/PycharmProjects/comp_visual_perception_ws_23_24/part2/files/object_mesh/'
+output_dir = '/part2/files/distance_mesh/'
 #Emanuel
-cloth_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/cloth_mesh/'
-object_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/object_mesh/'
-output_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/'
+#cloth_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/cloth_mesh/'
+#object_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/object_mesh/'
+#output_dir = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/'
 
 # Get list of filenames in the directories
 cloth_files = sorted([f for f in os.listdir(cloth_dir) if f.endswith('.obj')])
@@ -25,18 +25,24 @@ for cloth_file, object_file in zip(cloth_files, object_files):
     cloth = trimesh.load(os.path.join(cloth_dir, cloth_file))
     object = trimesh.load(os.path.join(object_dir, object_file), force='mesh')
 
+    # Sample points on the surface of the object
+    # The number of points can be adjusted. More points mean finer sampling
+    sampled_points = object.sample(1000000)
+
     # Extract vertices
     cloth_vertices = cloth.vertices
     object_vertices = object.vertices
 
     # Create a KDTree for efficient nearest neighbor search
-    tree = KDTree(object_vertices)
+    tree = KDTree(sampled_points)
 
-    # Compute the closest distance for each point in the cloth to the object
+    k = 5
+
+    # Compute smoothed closest distances
     closest_distances = np.zeros(len(cloth_vertices))
     for i, point in enumerate(cloth_vertices):
-        distance, _ = tree.query(point)
-        closest_distances[i] = distance
+        distances, _ = tree.query(point, k=k)
+        closest_distances[i] = np.mean(distances)  # Average the distances
 
     # Normalize distances and convert to grayscale
     min_dist = np.min(closest_distances)
