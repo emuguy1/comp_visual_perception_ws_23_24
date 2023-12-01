@@ -1,11 +1,13 @@
+import os
 import bpy
 import mathutils
 import math
 import random
 
 # Path to your OBJ file
-obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/1.obj'
-export_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/1.png'
+obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/2.obj'
+export_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/2.png'
+is_distance_mesh = False
 
 # Clear existing objects
 bpy.ops.object.select_all(action='SELECT')
@@ -20,12 +22,18 @@ bpy.ops.import_scene.obj(filepath=obj_path)
 # Ensure the imported object is selected and active
 imported_obj = bpy.context.selected_objects[0]
 bpy.context.view_layer.objects.active = imported_obj
+bpy.ops.object.shade_smooth()
+
 
 # Set up rendering parameters
 scene = bpy.context.scene
 scene.render.engine = 'CYCLES'  # Use the Cycles rendering engine
 scene.render.resolution_x = 512  # Set resolution width
 scene.render.resolution_y = 512  # Set resolution height
+
+if not is_distance_mesh:
+    bpy.ops.object.light_add(type='SUN', radius=2, align='WORLD', location=(150, 150, 50))
+
 
 # Create and position the camera
 camera_data = bpy.data.cameras.new(name='Camera')
@@ -105,3 +113,5 @@ for image_index in range(num_images):
 
     # Render the image
     bpy.ops.render.render(write_still=True)
+
+os.system("C:/Users/emanu/AppData/Local/Programs/Python/Python37/python.exe D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/scripts/make_background_black.py")
