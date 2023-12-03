@@ -5,9 +5,9 @@ import math
 import random
 
 # Path to your OBJ file
-obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/9.obj'
-export_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/9.png'
-is_distance_mesh = True
+obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/2.obj'
+export_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/2.png'
+is_distance_mesh = False
 
 # Clear existing objects
 bpy.ops.object.select_all(action='SELECT')
@@ -50,6 +50,9 @@ scene.render.resolution_y = 512  # Set resolution height
 bpy.ops.object.light_add(type='SUN', radius=2, align='WORLD', location=(150, 150, 0))
 if is_distance_mesh:
     bpy.context.object.data.cycles.cast_shadow = False
+else:
+    bpy.context.object.cycles.shadow_terminator_offset = 0.1
+
 
 
 # Create and position the camera
