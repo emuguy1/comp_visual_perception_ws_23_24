@@ -24,16 +24,20 @@ imported_obj = bpy.context.selected_objects[0]
 bpy.context.view_layer.objects.active = imported_obj
 bpy.ops.object.shade_smooth()
 
-# Enable vertex color if is distance mesh
+#Enable vertex color if is distance mesh
 if is_distance_mesh:
     # create new material and add vertex color as a color attribute
     mat = bpy.data.materials.new(name="VertexMat")
     mat.use_nodes = True
     mat.node_tree.nodes.new(type='ShaderNodeVertexColor')
     mat.node_tree.nodes["Color Attribute"].layer_name = "Color"
-    mat.node_tree.links.new(mat.node_tree.nodes["Color Attribute"].outputs[0],
-                            mat.node_tree.nodes["Principled BSDF"].inputs[0])
+    mat.node_tree.links.new(mat.node_tree.nodes["Color Attribute"].outputs[0], mat.node_tree.nodes["Principled BSDF"].inputs[0])
     imported_obj.data.materials.append(mat)
+    bpy.context.object.active_material.shadow_method = 'NONE'
+    bpy.context.object.active_material.diffuse_color = (1, 1, 1, 1)
+
+
+
 
 # Set up rendering parameters
 scene = bpy.context.scene
@@ -41,11 +45,12 @@ scene.render.engine = 'CYCLES'  # Use the Cycles rendering engine
 scene.render.resolution_x = 512  # Set resolution width
 scene.render.resolution_y = 512  # Set resolution height
 
-if not is_distance_mesh:
-    # TIDI
-    print(" ")
+
 
 bpy.ops.object.light_add(type='SUN', radius=2, align='WORLD', location=(150, 150, 0))
+if is_distance_mesh:
+    bpy.context.object.data.cycles.cast_shadow = False
+
 
 # Create and position the camera
 camera_data = bpy.data.cameras.new(name='Camera')
@@ -54,7 +59,6 @@ scene.collection.objects.link(camera_object)
 scene.camera = camera_object
 
 camera_data.lens = 90
-
 
 def get_object_center(obj):
     local_bbox_center = sum((mathutils.Vector(b) for b in obj.bound_box), mathutils.Vector()) / 8
@@ -95,7 +99,6 @@ def look_at(obj, target):
     direction = target - obj.location
     rot_quat = direction.to_track_quat('-Z', 'Y')
     obj.rotation_euler = rot_quat.to_euler()
-
 
 # Create and position the camera (not shown for brevity)
 
