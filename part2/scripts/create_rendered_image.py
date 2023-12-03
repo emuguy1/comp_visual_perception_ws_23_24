@@ -5,9 +5,9 @@ import math
 import random
 
 # Path to your OBJ file
-obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/2.obj'
-export_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/2.png'
-is_distance_mesh = False
+obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/9.obj'
+export_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/9.png'
+is_distance_mesh = True
 
 # Clear existing objects
 bpy.ops.object.select_all(action='SELECT')
@@ -17,13 +17,23 @@ bpy.ops.object.delete()
 bpy.context.scene.render.film_transparent = True
 
 # Import the OBJ file
-bpy.ops.import_scene.obj(filepath=obj_path)
+bpy.ops.wm.obj_import(filepath=obj_path)
 
 # Ensure the imported object is selected and active
 imported_obj = bpy.context.selected_objects[0]
 bpy.context.view_layer.objects.active = imported_obj
 bpy.ops.object.shade_smooth()
 
+# Enable vertex color if is distance mesh
+if is_distance_mesh:
+    # create new material and add vertex color as a color attribute
+    mat = bpy.data.materials.new(name="VertexMat")
+    mat.use_nodes = True
+    mat.node_tree.nodes.new(type='ShaderNodeVertexColor')
+    mat.node_tree.nodes["Color Attribute"].layer_name = "Color"
+    mat.node_tree.links.new(mat.node_tree.nodes["Color Attribute"].outputs[0],
+                            mat.node_tree.nodes["Principled BSDF"].inputs[0])
+    imported_obj.data.materials.append(mat)
 
 # Set up rendering parameters
 scene = bpy.context.scene
@@ -32,8 +42,10 @@ scene.render.resolution_x = 512  # Set resolution width
 scene.render.resolution_y = 512  # Set resolution height
 
 if not is_distance_mesh:
-    bpy.ops.object.light_add(type='SUN', radius=2, align='WORLD', location=(150, 150, 50))
+    # TIDI
+    print(" ")
 
+bpy.ops.object.light_add(type='SUN', radius=2, align='WORLD', location=(150, 150, 0))
 
 # Create and position the camera
 camera_data = bpy.data.cameras.new(name='Camera')
@@ -42,6 +54,7 @@ scene.collection.objects.link(camera_object)
 scene.camera = camera_object
 
 camera_data.lens = 90
+
 
 def get_object_center(obj):
     local_bbox_center = sum((mathutils.Vector(b) for b in obj.bound_box), mathutils.Vector()) / 8
@@ -82,6 +95,7 @@ def look_at(obj, target):
     direction = target - obj.location
     rot_quat = direction.to_track_quat('-Z', 'Y')
     obj.rotation_euler = rot_quat.to_euler()
+
 
 # Create and position the camera (not shown for brevity)
 
