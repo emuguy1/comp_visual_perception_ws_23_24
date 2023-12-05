@@ -35,6 +35,10 @@ def process_images_in_folder(folder_path):
             overlay_transparent_on_black(input_file, output_file)
 
 # Replace with your folder path
-folder_to_process = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/'
+folder_to_process_one = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/'
+folder_to_process_two = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_distance_cloth/'
+#folder_to_process_three = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files//'
 
-process_images_in_folder(folder_to_process)
+process_images_in_folder(folder_to_process_one)
+process_images_in_folder(folder_to_process_two)
+#process_images_in_folder(folder_to_process_three)
