@@ -4,12 +4,22 @@ import mathutils
 import math
 import random
 
+#Felix
+#folder_path = '/home/felix/PycharmProjects/'
+#python_path = TODO
+#Emanuel
+folder_path = 'D:/programmierte_programme/githubworkspace/'
+python_path = 'C:/Users/emanu/AppData/Local/Programs/Python/Python37/python.exe'
+
 # Path to your OBJ file
-filenum = str(1)
-obj_path = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/distance_mesh/'+filenum+'.obj'
-export_path_normal = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_cloth/'+filenum+'.png'
-export_path_distance = 'D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/files/images_distance_cloth/'+filenum+'.png'
+filenum = str(4)
+obj_path = folder_path+'comp_visual_perception_ws_23_24/part2/files/distance_mesh/'+filenum+'.obj'
+export_path_normal = folder_path+'comp_visual_perception_ws_23_24/part2/files/images_cloth/'+filenum+'.png'
+export_path_distance = folder_path+'comp_visual_perception_ws_23_24/part2/files/images_distance_cloth/'+filenum+'.png'
+obj_path_sample = folder_path+'comp_visual_perception_ws_23_24/part2/files/sample_mesh/'+filenum+'.obj'
+export_path_sample = folder_path+'comp_visual_perception_ws_23_24/part2/files/sample_mesh_images/'+filenum+'/.png'
 is_distance_mesh = False
+is_sample_run = True
 
 def render_image():
     # Clear existing objects
@@ -20,7 +30,10 @@ def render_image():
     bpy.context.scene.render.film_transparent = True
 
     # Import the OBJ file
-    bpy.ops.wm.obj_import(filepath=obj_path)
+    if is_sample_run:
+        bpy.ops.wm.obj_import(filepath=obj_path_sample)
+    else:
+        bpy.ops.wm.obj_import(filepath=obj_path)
 
     # Ensure the imported object is selected and active
     imported_obj = bpy.context.selected_objects[0]
@@ -32,6 +45,7 @@ def render_image():
         # create new material and add vertex color as a color attribute
         mat = bpy.data.materials.new(name="VertexMat")
         mat.use_nodes = True
+        mat.node_tree.nodes["Principled BSDF"].inputs[3].default_value = (1, 1, 1, 1)
         mat.node_tree.nodes.new(type='ShaderNodeVertexColor')
         mat.node_tree.nodes["Color Attribute"].layer_name = "Color"
         mat.node_tree.links.new(mat.node_tree.nodes["Color Attribute"].outputs[0], mat.node_tree.nodes["Principled BSDF"].inputs[0])
@@ -111,13 +125,19 @@ def render_image():
 
     num_images = 50  # Total number of images to render
 
+    if is_sample_run:
+        num_images = 10
+
     for image_index in range(num_images):
         # Random horizontal and vertical angles
         h_angles = [216, 0, 324, 72, 252, 108, 144, 180, 36, 288]
         v_angles = [19, 28, 7, 41, 34]
         h_angle = math.radians(h_angles.pop(math.floor(image_index / 5))+image_index)
         v_angle = math.radians(v_angles.pop(image_index % 5)+ image_index % 4)
-
+        if is_sample_run:
+            v_angle = math.radians(45)
+            h_angles = [216, 0, 324, 72, 252, 108, 144, 180, 36, 288]
+            h_angle = h_angles.pop(image_index)
         # Update camera distance
         distance = calculate_camera_distance(imported_obj, camera_object, desired_fill, h_angle, v_angle)
 
@@ -137,15 +157,18 @@ def render_image():
         # Update the export path for each image
         if is_distance_mesh:
             scene.render.filepath = f"{export_path_distance[:-4]}_{image_index}.png"
-        else:
+        elif not is_sample_run:
             scene.render.filepath = f"{export_path_normal[:-4]}_{image_index}.png"
+        else:
+            scene.render.filepath = f"{export_path_sample[:-4]}_{image_index}.png"
 
         # Render the image
         bpy.ops.render.render(write_still=True)
 
 
 render_image()
-is_distance_mesh = True
-render_image()
+if not is_sample_run:
+    is_distance_mesh = True
+    render_image()
 
-os.system("C:/Users/emanu/AppData/Local/Programs/Python/Python37/python.exe D:/programmierte_programme/githubworkspace/comp_visual_perception_ws_23_24/part2/scripts/make_background_black.py")
+os.system(python_path+" "+folder_path+"comp_visual_perception_ws_23_24/part2/scripts/make_background_black.py")
