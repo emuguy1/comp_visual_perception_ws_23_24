@@ -12,7 +12,7 @@ folder_path = 'D:/programmierte_programme/githubworkspace/'
 python_path = 'C:/Users/emanu/AppData/Local/Programs/Python/Python37/python.exe'
 
 # Path to your OBJ file
-filec = 1
+filec = 14
 is_distance_mesh = False
 is_sample_run = False
 
@@ -117,7 +117,7 @@ def render_image():
     for image_index in range(num_images):
         # Random horizontal and vertical angles
         h_angles = [216, 0, 324, 72, 252, 108, 144, 180, 36, 288]
-        v_angles = [19, 28, 7, 41, 34]
+        v_angles = [19, 28, 31, 41, 34]
         h_angle = math.radians(h_angles.pop(math.floor(image_index / 5)) + image_index)
         v_angle = math.radians(v_angles.pop(image_index % 5) + image_index % 4)
         if is_sample_run:
