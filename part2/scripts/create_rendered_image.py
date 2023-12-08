@@ -12,7 +12,7 @@ folder_path = 'D:/programmierte_programme/githubworkspace/'
 python_path = 'C:/Users/emanu/AppData/Local/Programs/Python/Python37/python.exe'
 
 # Path to your OBJ file
-filec = 14
+filec = 49
 is_distance_mesh = False
 is_sample_run = False
 
@@ -166,4 +166,4 @@ for i in range(1, 10):
         render_image()
     filec = filec + 1
 
-os.system(python_path + " " + folder_path + "comp_visual_perception_ws_23_24/part2/scripts/make_background_black.py")
+#os.system(python_path + " " + folder_path + "comp_visual_perception_ws_23_24/part2/scripts/make_background_black.py")
