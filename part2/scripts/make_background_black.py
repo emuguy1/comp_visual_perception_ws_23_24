@@ -36,7 +36,7 @@ def process_images_in_folder(folder_path):
 
     # Iterate through files in the folder
     for file_name in os.listdir(folder_path):
-        if file_name.lower().endswith('.png') and int(file_name.split('_')[0]) > 63:
+        if file_name.lower().endswith('.png'):
             input_file = os.path.join(folder_path, file_name)
             output_file = os.path.join(folder_path, file_name)
             overlay_transparent_on_black(input_file, output_file)
@@ -49,9 +49,9 @@ folder_to_process_four = folder_path+'comp_visual_perception_ws_23_24/part2/file
 folder_to_process_five = folder_path+'comp_visual_perception_ws_23_24/part2/files/sample_mesh_images/3/'
 folder_to_process_six = folder_path+'comp_visual_perception_ws_23_24/part2/files/sample_mesh_images/4/'
 
-process_images_in_folder(folder_to_process_one)
-process_images_in_folder(folder_to_process_two)
-#process_images_in_folder(folder_to_process_three)
-#process_images_in_folder(folder_to_process_four)
-#process_images_in_folder(folder_to_process_five)
-#process_images_in_folder(folder_to_process_six)
+#process_images_in_folder(folder_to_process_one)
+#process_images_in_folder(folder_to_process_two)
+process_images_in_folder(folder_to_process_three)
+process_images_in_folder(folder_to_process_four)
+process_images_in_folder(folder_to_process_five)
+process_images_in_folder(folder_to_process_six)

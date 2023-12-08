@@ -12,7 +12,7 @@ folder_path = 'D:/programmierte_programme/githubworkspace/'
 python_path = 'C:/Users/emanu/AppData/Local/Programs/Python/Python37/python.exe'
 
 # Path to your OBJ file
-filec = 49
+filec = 1
 is_distance_mesh = False
 is_sample_run = False
 
@@ -123,7 +123,9 @@ def render_image():
         if is_sample_run:
             v_angle = math.radians(45)
             h_angles = [216, 0, 324, 72, 252, 108, 144, 180, 36, 288]
-            h_angle = h_angles.pop(image_index)
+            if filec == 4:
+                h_angles = [38, 327, 75, 289, 352, 271, 82, 70, 20, 308]
+            h_angle = math.radians(h_angles.pop(image_index))
         # Update camera distance
         distance = calculate_camera_distance(imported_obj, camera_object, desired_fill, h_angle, v_angle)
 
@@ -142,11 +144,11 @@ def render_image():
 
         # Update the export path for each image
         if is_distance_mesh:
-            scene.render.filepath = f"{export_path_distance[:-4]}_{image_index}.png"
+            scene.render.filepath = f"{export_path_distance[:-4]}_{image_index + 1}.png"
         elif not is_sample_run:
-            scene.render.filepath = f"{export_path_normal[:-4]}_{image_index}.png"
+            scene.render.filepath = f"{export_path_normal[:-4]}_{image_index + 1}.png"
         else:
-            scene.render.filepath = f"{export_path_sample[:-4]}_{image_index}.png"
+            scene.render.filepath = f"{export_path_sample[:-4]}{image_index + 1}.png"
 
         # Render the image
         bpy.ops.render.render(write_still=True)
